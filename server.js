@@ -16,19 +16,19 @@ connection.connect(function(err) {if (err) throw err;});
 let allBurgers = [];
 
 app.get("/",function(req,res){
-    selectAll(originRes);
+    selectAll(res);
 });
 
 app.post("/",function(req,res){
     let newName = req.body.burger;
-    insertOne(newName);
+    insertOne(newName, res);
 });
 
 app.delete("/:b",function(req,res){
     allBurgers.forEach(burger =>{
         if(burger.id === req.params.b)
         {
-            updateOne(burger);
+            updateOne(burger, res);
         }
     });
 });
@@ -56,20 +56,20 @@ function selectAll(originRes)
     });
 }
 
-function insertOne(newBurger)
+function insertOne(newBurger, originRes)
 {
-    connection.query("INSERT INTO burgers (burger_name, devoured) VALUES = ?", [newBurger, false], function(err,res)
+    connection.query("INSERT INTO burgers SET ?", {burger_name: newBurger, devoured: false}, function(err,res)
     {
         if(err) throw err;
-        app.redirect("/");
+        originRes.redirect("/");
     });
 }
 
-function updateOne(burgerObject)
+function updateOne(burgerObject, originRes)
 {
     connection.query("UPDATE burgers set devoured=true WHERE id=?",[burgerObject.id],function(err,res){
         if(err) throw err;
-        app.redirect("/");
+        originRes.redirect("/");
     });
 }
 
