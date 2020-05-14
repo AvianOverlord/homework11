@@ -13,27 +13,63 @@ app.use(express.json());
 const connection = mysql.createConnection({host: "localhost", user: "root", password: "hello1234",database: "burgers_db"});
 connection.connect(function(err) {if (err) throw err;});
 
+let allBurgers = [];
+
+app.get("/",function(req,res){
+    selectAll();
+});
+
+app.post("/",function(req,res){
+    let newName = req.body.burger;
+    insertOne(newName);
+});
+
+app.delete("/:b",function(req,res){
+    allBurgers.forEach(burger =>{
+        if(burger.id === req.params.b)
+        {
+            updateOne(burger);
+        }
+    });
+});
+
 function selectAll()
 {
     connection.query("SELECT * FROM burgers", function(err, res)
     {
         if(err) throw err;
-        return res;
+        allBurgers = res;
+        let currentBurgers = [];
+        let pastBurgers = [];
+        res.forEach(burger => {
+           if(burger.devoured)
+           {
+               pastBurgers.push(burger);
+           } 
+           else
+           {
+               currentBurgers.push(burger);
+           }
+        });
+        let data = {uneaten: currentBurgers, eaten: pastBurgers};
+        res.render("index", data);
     });
 }
 
 function insertOne(newBurger)
 {
-    connection.query("INSERT INTO burgers (burger_name, devoured) VALUES = ?", [newBurger.name, false], function(err,res)
+    connection.query("INSERT INTO burgers (burger_name, devoured) VALUES = ?", [newBurger, false], function(err,res)
     {
         if(err) throw err;
+        selectAll();
     });
 }
 
 function updateOne(burgerObject)
 {
-    connection.query("UPDATE burgers set devoured=true WHERE id=?",burgerObject.id,function(err,res){
+    connection.query("UPDATE burgers set devoured=true WHERE id=?",[burgerObject.id],function(err,res){
         if(err) throw err;
+        selectAll();
     });
 }
 
