@@ -25,6 +25,7 @@ app.post("/",function(req,res){
 });
 
 app.post("/devour/:b",function(req,res){
+    console.log(req.params);
     allBurgers.forEach(burger =>{
         if(burger.id === parseInt(req.params.b))
         {

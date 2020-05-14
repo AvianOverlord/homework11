@@ -10,8 +10,9 @@
             {{#each uneaten}}
             <div class="card">
                 <form method="POST" action="/devour/{{id}}">
-                <input value="Devour!"/> 
+                <p>{{id}}: {{burger_name}}</p> 
                 <button type="submit" class="btn btn-danger"/>Devour!</button>
+                </form>
             </div>
             {{/each}}
         </div>
