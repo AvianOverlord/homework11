@@ -13,6 +13,30 @@ app.use(express.json());
 const connection = mysql.createConnection({host: "localhost", user: "root", password: "hello1234",database: "burgers_db"});
 connection.connect(function(err) {if (err) throw err;});
 
+function selectAll()
+{
+    connection.query("SELECT * FROM burgers", function(err, res)
+    {
+        if(err) throw err;
+        return res;
+    });
+}
+
+function insertOne(newBurger)
+{
+    connection.query("INSERT INTO burgers (burger_name, devoured) VALUES = ?", [newBurger.name, false], function(err,res)
+    {
+        if(err) throw err;
+    });
+}
+
+function updateOne(burgerObject)
+{
+    connection.query("UPDATE burgers set devoured=true WHERE id=?",burgerObject.id,function(err,res){
+        if(err) throw err;
+    });
+}
+
 /*
     Connection String: mysql://g7qghd263elmk9jc:twnaapa28hiwjcb8@pqxt96p7ysz6rn1f.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/q143uquy7brn88z5
     Host: 	pqxt96p7ysz6rn1f.cbetxkdyhwsb.us-east-1.rds.amazonaws.com 	
