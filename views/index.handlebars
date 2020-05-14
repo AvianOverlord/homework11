@@ -4,17 +4,19 @@
             <form method="POST" action="/">
             <label for="burger">What kind of burger do you want to eat?</label>
             <input type="text" id="burger" name="burger">
-            <input type="submit" value="Burger">
+            <input type="submit" value="Sumbit">
             </form>
             <h1>Burgers to eat:</h1>
             {{#each uneaten}}
             <div class="card">
-                <p>{{burger_name}}</p>
-                <button></button>
+                <form method="POST" action="/devour/{{id}}">
+                <input value="Devour!"/> 
+                <button type="submit" class="btn btn-danger"/>Devour!</button>
             </div>
             {{/each}}
         </div>
         <div class="col-5 offset-2">
+            <h1>Burgers eaten:</h1>
             {{#each eaten}}
             <div class="card">
                 <p>{{burger_name}}</p>
@@ -23,3 +25,11 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(".devour-btn").on("click",function(){
+        const burgerID = $(this).attr("id");
+        $.post("/" + burgerID);
+    });
+</script>

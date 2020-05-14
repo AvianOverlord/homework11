@@ -24,9 +24,9 @@ app.post("/",function(req,res){
     insertOne(newName, res);
 });
 
-app.delete("/:b",function(req,res){
+app.post("/devour/:b",function(req,res){
     allBurgers.forEach(burger =>{
-        if(burger.id === req.params.b)
+        if(burger.id === parseInt(req.params.b))
         {
             updateOne(burger, res);
         }
@@ -38,6 +38,7 @@ function selectAll(originRes)
     connection.query("SELECT * FROM burgers", function(err, res)
     {
         if(err) throw err;
+        allBurgers = [];
         res.forEach(burger => allBurgers.push(burger));
         let currentBurgers = [];
         let pastBurgers = [];
