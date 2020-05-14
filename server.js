@@ -1,6 +1,6 @@
 const express = require("express");
 const mysql = require("mysql");
-const handlebars = require("express-handlebars");
+const exphbs = require("express-handlebars");
 
 const app = express();
 let PORT = 3000;
@@ -16,7 +16,7 @@ connection.connect(function(err) {if (err) throw err;});
 let allBurgers = [];
 
 app.get("/",function(req,res){
-    selectAll();
+    selectAll(originRes);
 });
 
 app.post("/",function(req,res){
@@ -33,12 +33,12 @@ app.delete("/:b",function(req,res){
     });
 });
 
-function selectAll()
+function selectAll(originRes)
 {
     connection.query("SELECT * FROM burgers", function(err, res)
     {
         if(err) throw err;
-        allBurgers = res;
+        res.forEach(burger => allBurgers.push(burger));
         let currentBurgers = [];
         let pastBurgers = [];
         res.forEach(burger => {
@@ -52,7 +52,7 @@ function selectAll()
            }
         });
         let data = {uneaten: currentBurgers, eaten: pastBurgers};
-        res.render("index", data);
+        originRes.render("index", data);
     });
 }
 
@@ -61,7 +61,7 @@ function insertOne(newBurger)
     connection.query("INSERT INTO burgers (burger_name, devoured) VALUES = ?", [newBurger, false], function(err,res)
     {
         if(err) throw err;
-        selectAll();
+        app.redirect("/");
     });
 }
 
@@ -69,9 +69,11 @@ function updateOne(burgerObject)
 {
     connection.query("UPDATE burgers set devoured=true WHERE id=?",[burgerObject.id],function(err,res){
         if(err) throw err;
-        selectAll();
+        app.redirect("/");
     });
 }
+
+app.listen(PORT, function() { console.log("App listening on PORT " + PORT)});
 
 /*
     Connection String: mysql://g7qghd263elmk9jc:twnaapa28hiwjcb8@pqxt96p7ysz6rn1f.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/q143uquy7brn88z5
