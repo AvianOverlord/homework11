@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="row">
+        <div class="col-5">
+            <form method="POST" action="/">
+            <label for="burger">What kind of burger do you want to eat?</label>
+            <input type="text" id="burger" name="burger">
+            <input type="submit" value="Burger">
+            </form>
+            <h1>Burgers to eat:</h1>
+            {{#each uneaten}}
+            <div class="card">
+                <p>{{burger_name}}</p>
+                <button></button>
+            </div>
+            {{/each}}
+        </div>
+        <div class="col-5 offset-2">
+            {{#each eaten}}
+            <div class="card">
+                <p>{{burger_name}}</p>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
